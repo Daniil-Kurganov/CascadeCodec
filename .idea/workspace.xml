@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e0c0b9-ad4e-4307-a5c2-b37796999a59" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/code/Draft.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/HammingCodec.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Draft.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/Draft.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/Draft.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/HammingCodec.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/HammingCodec.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +44,7 @@
     "ignore.virus.scanning.warn.message": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.Draft (1)">
+  <component name="RunManager" selected="Python.HammingCodec">
     <configuration name="Draft (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CascadeCodec" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -111,8 +110,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Draft (1)" />
         <item itemvalue="Python.HammingCodec" />
+        <item itemvalue="Python.Draft (1)" />
         <item itemvalue="Python.Draft" />
       </list>
     </recent_temporary>
