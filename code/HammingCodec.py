@@ -1,9 +1,3 @@
-import math
-import random
-import numpy as np
-
-int_r, int_n, int_k = 4, 15, 11
-
 def calculation_of_correction_bits(list_code_word: list) -> str:
     '''Вычисление корректирующих битов в кодовом слове'''
     for int_position_of_correction_bit in [0, 1, 3, 7]:
@@ -35,3 +29,5 @@ def hamming_codec_encode(int_item: int) -> str:
             list_code_word.append(string_iformation_word[int_position_of_bits])
             int_position_of_bits += 1
     return calculation_of_correction_bits(list_code_word)
+
+int_r, int_n, int_k = 4, 15, 11
