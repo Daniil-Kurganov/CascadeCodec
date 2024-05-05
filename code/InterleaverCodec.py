@@ -21,12 +21,25 @@ def intr(s):
             int_c = 0
             int_r += 1
     return
+def srs(s, i):
+    global sres
+    sres += s[i]
+    return
 
-# a = np.array([[['000', '001'], ['010', '011']], [['100', '101'], ['110', '111']], [['200', '201'], ['210', '211']]])
-a = np.array([[['123', '456'], ['123', '456']], [['456', '456'], ['123', '456']], [['123', '456'], ['123', '456']]])
+a = np.array([[['000', '001'], ['010', '011']], [['100', '101'], ['110', '111']], [['200', '201'], ['210', '211']]])
+# a = np.array([[['1123', '1456'], ['123', '456']], [['123', '456'], ['123', '456']], [['123', '456'], ['123', '456']]])
 res = np.full(a.shape[:2], fill_value = ('-' * 6))
-list_of_correction_bit_positions = [0, 1, 3, 7]
+l = [2]
 int_r, int_c, int_i = 0, 0, -1
 s1, s2 = '', ''
 np.vectorize(lambda s: intr(s))(a)
-print(res)
+lres = []
+for r in res:
+    lc = []
+    for i in range(6):
+        sres = ''
+        np.vectorize(lambda sc: srs(sc, i))(r)
+        lc.append(sres[1:])
+    lres.append(lc)
+nres = np.array(lres)
+print(nres)
