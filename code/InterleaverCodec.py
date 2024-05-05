@@ -1,45 +1,45 @@
 import numpy as np
 
-def intr(s):
-    global s1, s2, int_c, int_r, int_i, a, l
-    if int_i == -1:
-        int_i += 1
+def create_inreleaver_table_from_code_words(string_item: str, array_input: np.array) -> None:
+    '''Функция создания блочного перемежителя для массива строк кодовых подслов. Адаптирована под numpy.vectorize()'''
+    global string_current_result, string_current_check_bits, int_index_of_current_column, int_index_of_current_row, int_index_of_current_item,\
+        list_of_correction_bit_positions, string_current_main_bits, array_workspace
+    if int_index_of_current_item == -1:
+        int_index_of_current_item += 1
         return
-    print(int_i, int_c, int_r)
-    print(res)
-    lv = list(s)
-    s2 += ''.join([lv.pop(ind) for ind in l])
-    s1 += ''.join(lv)
-    if int_i < (a.shape[2] - 1): int_i += 1
+    list_workspace = list(string_item)
+    string_current_check_bits += ''.join([list_workspace.pop(int_index_of_current_correction_bit) for int_index_of_current_correction_bit
+                                             in list_of_correction_bit_positions])
+    string_current_main_bits += ''.join(list_workspace)
+    if int_index_of_current_item < (array_input.shape[2] - 1): int_index_of_current_item += 1
     else:
-        print('Write')
-        res[int_r, int_c] = s1 + s2
-        s1, s2 = '', ''
-        int_i = 0
-        if int_c < (a.shape[1] - 1): int_c += 1
+        array_workspace[int_index_of_current_row, int_index_of_current_column] = string_current_main_bits + string_current_check_bits
+        string_current_main_bits, string_current_check_bits = '', ''
+        int_index_of_current_item = 0
+        if int_index_of_current_column < (array_input.shape[1] - 1): int_index_of_current_column += 1
         else:
-            int_c = 0
-            int_r += 1
+            int_index_of_current_column = 0
+            int_index_of_current_row += 1
     return
-def srs(s, i):
-    global sres
-    sres += s[i]
+def create_interleaver_out_string(string_code_word: str, int_index_of_current_interleaver_column: int) -> None:
+    global string_current_result
+    string_current_result += string_code_word[int_index_of_current_interleaver_column]
     return
+def interleaver_codec_encode(array_input: np.array) -> np.array:
+    '''Процесс обработки входящего массива перемежителем'''
+    global array_workspace, string_current_result
+    array_workspace = np.full(array_input.shape[:2], fill_value = ('-' * 45))
+    np.vectorize(lambda string_current_item: create_inreleaver_table_from_code_words(string_current_item, array_input))(array_input)
+    for array_current_row in array_workspace:
+        list_workspace = []
+        for int_index_of_current_interleaver_column in range(45):
+            string_current_result = ''
+            np.vectorize(lambda string_current_code_word: create_interleaver_out_string(string_current_code_word,
+                                                                                        int_index_of_current_interleaver_column))(array_current_row)
+            list_workspace.append(string_current_result[1:])
+        list_result.append(list_workspace)
+    return np.array(list_result)
 
-a = np.array([[['000', '001'], ['010', '011']], [['100', '101'], ['110', '111']], [['200', '201'], ['210', '211']]])
-# a = np.array([[['1123', '1456'], ['123', '456']], [['123', '456'], ['123', '456']], [['123', '456'], ['123', '456']]])
-res = np.full(a.shape[:2], fill_value = ('-' * 6))
-l = [2]
-int_r, int_c, int_i = 0, 0, -1
-s1, s2 = '', ''
-np.vectorize(lambda s: intr(s))(a)
-lres = []
-for r in res:
-    lc = []
-    for i in range(6):
-        sres = ''
-        np.vectorize(lambda sc: srs(sc, i))(r)
-        lc.append(sres[1:])
-    lres.append(lc)
-nres = np.array(lres)
-print(nres)
+list_of_correction_bit_positions, list_result = [0, 1, 3, 7], []
+int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
+string_current_main_bits, string_current_check_bits = '', ''
