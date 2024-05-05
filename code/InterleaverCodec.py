@@ -31,14 +31,14 @@ def filling_interleaver_array(string_item: str, array_input: np.array) -> None:
     if int_index_of_current_item == -1:
         int_index_of_current_item += 1
         return
-    string_current_line_1 = array_workspace[int_index_of_current_row][int_index_of_current_column]
-    string_current_line_2 = array_workspace[int_index_of_current_row][int_index_of_current_column + 1]
-    array_workspace[int_index_of_current_row, int_index_of_current_column] = (string_current_line_1[:int_index_of_current_item] + string_item[0] +
-                                                                              string_current_line_1[:int_index_of_current_item + 1])
-    array_workspace[int_index_of_current_row, int_index_of_current_column + 1] = (string_current_line_2[:int_index_of_current_item] + string_item[1] +
-                                                                                  string_current_line_2[:int_index_of_current_item + 1])
-    if int_index_of_current_item < (array_input.shape[1] - 1): int_index_of_current_item += 1
+    for int_index_of_current_interleaver_column in range(array_input.shape[0]):
+        array_workspace[int_index_of_current_row, int_index_of_current_column + int_index_of_current_interleaver_column] = (
+            array_workspace[int_index_of_current_row, int_index_of_current_column + int_index_of_current_interleaver_column][:int_index_of_current_item] +
+            string_item[int_index_of_current_interleaver_column] +
+            array_workspace[int_index_of_current_row, int_index_of_current_column + int_index_of_current_interleaver_column][:int_index_of_current_item + 1])
+    if int_index_of_current_item < (array_input.shape[0] - 1): int_index_of_current_item += 1
     else:
+        print(int_index_of_current_row)
         int_index_of_current_item = 0
         int_index_of_current_row += 1
     return
@@ -71,11 +71,12 @@ def interleaver_codec_encode(array_input: np.array) -> np.array:
     '''Процесс перемежения'''
     global array_workspace, string_current_result, int_index_of_current_row, int_index_of_current_column, int_index_of_current_item
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
-    array_workspace = np.full(array_input.shape[:2], fill_value = ('-' * 9))
+    list_result = []
+    array_workspace = np.full(array_input.shape[:2], fill_value = ('-' * 45))
     np.vectorize(lambda string_current_item: create_inreleaver_table_from_code_words(string_current_item, array_input))(array_input)
     for array_current_row in array_workspace:
         list_workspace = []
-        for int_index_of_current_interleaver_column in range(9):
+        for int_index_of_current_interleaver_column in range(45):
             string_current_result = ''
             np.vectorize(lambda string_current_code_word: create_interleaver_out_string(string_current_code_word,
                                                                                         int_index_of_current_interleaver_column))(array_current_row)
@@ -88,11 +89,13 @@ def interleaver_codec_decode(array_input:np.array) -> np.array:
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
     array_workspace = np.full((array_input.shape[0], len(array_input[0][0])), fill_value = ('-' * array_input.shape[1]))
     np.vectorize(lambda string_current_submessage: filling_interleaver_array(string_current_submessage, array_input))(array_input)
+    print(array_workspace[0].shape)
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
     array_result = np.full((array_workspace.shape[0], array_workspace.shape[1], 3), fill_value = ('-' * 3))
     np.vectorize(lambda string_current_code_word: decode_from_interleaver_table(string_current_code_word))(array_workspace)
+    # print(array_result)
     return array_result
 
-list_correction_bit_positions, list_result = [1], []
+list_correction_bit_positions = [0, 1, 3, 7]
 int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
 string_current_main_bits, string_current_check_bits = '', ''
