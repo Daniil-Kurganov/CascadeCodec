@@ -31,16 +31,16 @@ def filling_interleaver_array(string_item: str, array_input: np.array) -> None:
     if int_index_of_current_item == -1:
         int_index_of_current_item += 1
         return
-    for int_index_of_current_interleaver_column in range(array_input.shape[0]):
+    for int_index_of_current_interleaver_column in range((len(array_input[0][0]) - 1)):
         array_workspace[int_index_of_current_row, int_index_of_current_column + int_index_of_current_interleaver_column] = (
             array_workspace[int_index_of_current_row, int_index_of_current_column + int_index_of_current_interleaver_column][:int_index_of_current_item] +
             string_item[int_index_of_current_interleaver_column] +
             array_workspace[int_index_of_current_row, int_index_of_current_column + int_index_of_current_interleaver_column][:int_index_of_current_item + 1])
-    if int_index_of_current_item < (array_input.shape[0] - 1): int_index_of_current_item += 1
+    if int_index_of_current_item < (len(array_input[0][0]) - 1): int_index_of_current_item += 1
     else:
-        print(int_index_of_current_row)
-        int_index_of_current_item = 0
-        int_index_of_current_row += 1
+        if int_index_of_current_row < (array_input.shape[0] - 1):
+            int_index_of_current_item = 0
+            int_index_of_current_row += 1
     return
 def decode_from_interleaver_table(string_item: str) -> None:
     '''Декодирование кодовых подслов из массива перемежителя. Адаптирована под numpy.vectorize()'''
@@ -89,11 +89,9 @@ def interleaver_codec_decode(array_input:np.array) -> np.array:
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
     array_workspace = np.full((array_input.shape[0], len(array_input[0][0])), fill_value = ('-' * array_input.shape[1]))
     np.vectorize(lambda string_current_submessage: filling_interleaver_array(string_current_submessage, array_input))(array_input)
-    print(array_workspace[0].shape)
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
     array_result = np.full((array_workspace.shape[0], array_workspace.shape[1], 3), fill_value = ('-' * 3))
     np.vectorize(lambda string_current_code_word: decode_from_interleaver_table(string_current_code_word))(array_workspace)
-    # print(array_result)
     return array_result
 
 list_correction_bit_positions = [0, 1, 3, 7]
