@@ -74,6 +74,7 @@ def interleaver_codec_encode(array_input: np.array) -> np.array:
     list_result = []
     array_workspace = np.full(array_input.shape[:2], fill_value = ('-' * 45))
     np.vectorize(lambda string_current_item: create_inreleaver_table_from_code_words(string_current_item, array_input))(array_input)
+    print(array_workspace)
     for array_current_row in array_workspace:
         list_workspace = []
         for int_index_of_current_interleaver_column in range(45):
@@ -89,6 +90,10 @@ def interleaver_codec_decode(array_input:np.array) -> np.array:
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
     array_workspace = np.full((array_input.shape[0], len(array_input[0][0])), fill_value = ('-' * array_input.shape[1]))
     np.vectorize(lambda string_current_submessage: filling_interleaver_array(string_current_submessage, array_input))(array_input)
+    # print()
+    # print()
+    # print(array_workspace)
+    # print(array_workspace.shape)
     int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
     array_result = np.full((array_workspace.shape[0], array_workspace.shape[1], 3), fill_value = ('-' * 3))
     np.vectorize(lambda string_current_code_word: decode_from_interleaver_table(string_current_code_word))(array_workspace)
