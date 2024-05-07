@@ -1,0 +1,67 @@
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_Window(object):
+    def setupUi(self, Window):
+        Window.setObjectName("Window")
+        Window.resize(790, 379)
+        self.centralwidget = QtWidgets.QWidget(Window)
+        self.centralwidget.setObjectName("centralwidget")
+        self.PushButtonSelectImage = QtWidgets.QPushButton(self.centralwidget)
+        self.PushButtonSelectImage.setGeometry(QtCore.QRect(10, 10, 151, 23))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.PushButtonSelectImage.setFont(font)
+        self.PushButtonSelectImage.setObjectName("PushButtonSelectImage")
+        self.LabelImage = QtWidgets.QLabel(self.centralwidget)
+        self.LabelImage.setGeometry(QtCore.QRect(470, 50, 300, 300))
+        self.LabelImage.setText("")
+        self.LabelImage.setObjectName("LabelImage")
+        self.ProgressBar = QtWidgets.QProgressBar(self.centralwidget)
+        self.ProgressBar.setGeometry(QtCore.QRect(180, 10, 381, 23))
+        self.ProgressBar.setProperty("value", 0)
+        self.ProgressBar.setObjectName("ProgressBar")
+        self.TableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.TableWidget.setGeometry(QtCore.QRect(15, 50, 431, 301))
+        self.TableWidget.setObjectName("TableWidget")
+        self.TableWidget.setColumnCount(0)
+        self.TableWidget.setRowCount(0)
+        self.ComboBoxSelectTable = QtWidgets.QComboBox(self.centralwidget)
+        self.ComboBoxSelectTable.setGeometry(QtCore.QRect(570, 10, 201, 22))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.ComboBoxSelectTable.setFont(font)
+        self.ComboBoxSelectTable.setObjectName("ComboBoxSelectTable")
+        self.ComboBoxSelectTable.addItem("")
+        self.ComboBoxSelectTable.addItem("")
+        self.ComboBoxSelectTable.addItem("")
+        self.ComboBoxSelectTable.addItem("")
+        self.ComboBoxSelectTable.addItem("")
+        self.ComboBoxSelectTable.addItem("")
+        Window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(Window)
+        self.statusbar.setObjectName("statusbar")
+        Window.setStatusBar(self.statusbar)
+
+        self.retranslateUi(Window)
+        QtCore.QMetaObject.connectSlotsByName(Window)
+
+    def retranslateUi(self, Window):
+        _translate = QtCore.QCoreApplication.translate
+        Window.setWindowTitle(_translate("Window", "Каскадный кодек"))
+        self.PushButtonSelectImage.setText(_translate("Window", "Выбрать изображение"))
+        self.ComboBoxSelectTable.setItemText(0, _translate("Window", "Кодек Хэмминга - кодер"))
+        self.ComboBoxSelectTable.setItemText(1, _translate("Window", "Перемежитель - кодер"))
+        self.ComboBoxSelectTable.setItemText(2, _translate("Window", "Свёрточный кодек - кодер"))
+        self.ComboBoxSelectTable.setItemText(3, _translate("Window", "Сверточный кодек - декодер"))
+        self.ComboBoxSelectTable.setItemText(4, _translate("Window", "Перемежитель - декодер"))
+        self.ComboBoxSelectTable.setItemText(5, _translate("Window", "Кодек Хэмминга - декодер"))
+
+
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     Window = QtWidgets.QMainWindow()
+#     ui = Ui_Window()
+#     ui.setupUi(Window)
+#     Window.show()
+#     sys.exit(app.exec_())
