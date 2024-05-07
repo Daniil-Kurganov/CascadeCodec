@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e0c0b9-ad4e-4307-a5c2-b37796999a59" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/code/BackendCompiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/BackendCompiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/ConvolutionalCodec.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/ConvolutionalCodec.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/draft.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/draft.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +38,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "ConvolutionalCodec",
+    "git-widget-placeholder": "Frontend",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/User/PythonProjects/ConvolutionalCodec/Draft.py"
   }
