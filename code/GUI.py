@@ -50,11 +50,11 @@ class Ui_Window(object):
         Window.setWindowTitle(_translate("Window", "Каскадный кодек"))
         self.PushButtonSelectImage.setText(_translate("Window", "Выбрать изображение"))
         self.ComboBoxSelectTable.setItemText(0, _translate("Window", "Кодек Хэмминга - кодер"))
-        self.ComboBoxSelectTable.setItemText(1, _translate("Window", "Кодек Хэмминга - декодер"))
-        self.ComboBoxSelectTable.setItemText(2, _translate("Window", "Перемежитель - кодер"))
-        self.ComboBoxSelectTable.setItemText(3, _translate("Window", "Перемежитель - декодер"))
-        self.ComboBoxSelectTable.setItemText(4, _translate("Window", "Свёрточный кодек - кодер"))
-        self.ComboBoxSelectTable.setItemText(5, _translate("Window", "Сверточный кодек - декодер"))
+        self.ComboBoxSelectTable.setItemText(1, _translate("Window", "Перемежитель - кодер"))
+        self.ComboBoxSelectTable.setItemText(2, _translate("Window", "Свёрточный кодек - кодер"))
+        self.ComboBoxSelectTable.setItemText(3, _translate("Window", "Сверточный кодек - декодер"))
+        self.ComboBoxSelectTable.setItemText(4, _translate("Window", "Перемежитель - декодер"))
+        self.ComboBoxSelectTable.setItemText(5, _translate("Window", "Кодек Хэмминга - декодер"))
 
 
 # if __name__ == "__main__":
