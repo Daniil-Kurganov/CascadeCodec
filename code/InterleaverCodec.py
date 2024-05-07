@@ -54,7 +54,6 @@ def interleaver_codec_encode(array_input: np.array) -> None:
     int_counter_done_items, int_counter_done_columns, int_counter_done_rows = -1, 0, 0
     np.vectorize(lambda string_current_code_subword: create_interleaver_matrix(
         string_current_code_subword))(array_input)
-    print(array_interleaver_table)
     list_result = []
     for array_current_interleaver_table_row in array_interleaver_table:
         list_workspace = []
@@ -91,11 +90,22 @@ def decode_code_words_from_interleaver_submessages(string_message_subword: str) 
         int_counter_done_rows += 1
         int_counter_done_items = 0
     return
+def decode_pixel_code_subwords_from_code_subword(string_pixel_code_subwords) -> None:
+    '''Декодирование кодового подслова в 3 кодовых подслова пикселя. Адаптирована под numpy.vectorize()'''
+    global array_interleaver_table, int_counter_done_columns, int_counter_done_rows, array_result
+    if int_counter_done_columns == -1:
+        int_counter_done_columns += 1
+        return
+    string_code_subword = array_interleaver_table[int_counter_done_rows][int_counter_done_columns]
+    # Распределение кодового подслова на кодовые подслова цветов пикселя
+
 def interleaver_codec_decode(array_input: np.array) -> np.array:
     '''Процесс деперемежения'''
-    global array_interleaver_table, int_counter_done_items, int_counter_done_columns, int_counter_done_rows
+    global array_interleaver_table, int_counter_done_items, int_counter_done_columns, int_counter_done_rows, array_result
     array_interleaver_table = np.full((array_input.shape[0], len(array_input[0][0])), fill_value=('-' * 45))
     int_counter_done_items, int_counter_done_rows = -1, 0
     np.vectorize(lambda string_current_submessage: decode_code_words_from_interleaver_submessages(string_current_submessage))(array_input)
-    print()
     print(array_interleaver_table)
+    print()
+    array_result = np.full((array_interleaver_table.shape[0], array_interleaver_table.shape[0], 3), fill_value = ('-' * 15))
+    int_counter_done_columns, int_counter_done_rows = -1, 0
