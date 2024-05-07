@@ -82,9 +82,6 @@ class Codec:
             dictionary_trellis_diagram[int_iteration] = dictionary_workspace
             int_iteration += 1
             list_states_for_processing = [string_current_state for string_current_state in dictionary_workspace.keys()]
-        print('Словарь решётчатой диаграммы:')
-        for string_current_key in dictionary_trellis_diagram.keys():
-            print('  {}: {}'.format(string_current_key, dictionary_trellis_diagram[string_current_key]))
         for int_current_iteration in dictionary_trellis_diagram.keys():
             int_current_index_state_minimal_difference = list(dictionary_trellis_diagram[int_current_iteration].keys()).index(min(
                 dictionary_trellis_diagram[int_current_iteration], key = dictionary_trellis_diagram[int_current_iteration].get))
@@ -108,16 +105,9 @@ def convolutional_codec_encode(string_item: str) -> str:
     '''Кодирование входящего сообщения'''
     global codec
     return codec.encode(string_item)
-
-
-
+def convolutional_codec_decode(string_item: str) -> str:
+    '''Декодирование входящего сообщения'''
+    global codec
+    return codec.decode(string_item)
 
 codec = Codec()
-# print('Кодовое слово:', string_code_word)
-# int_position_of_error = random.randint(0, len(string_code_word))
-# string_message_word = (string_code_word[:int_position_of_error] + changing_the_bit(string_code_word[int_position_of_error]) +
-#                        string_code_word[int_position_of_error + 1:])
-# string_output_text_binary = codec.decode(string_message_word)
-# if string_output_text_binary != string_input_text_binary: print('В процессе декодирования произошла ошибка.')
-# string_output_text_real = int(string_output_text_binary, 2).to_bytes((int(string_output_text_binary, 2).bit_length() + 7) // 8, 'big').decode()
-# print('Выходное сообщение:\n{}'.format(string_output_text_real))
