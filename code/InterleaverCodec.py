@@ -97,15 +97,28 @@ def decode_pixel_code_subwords_from_code_subword(string_pixel_code_subwords) -> 
         int_counter_done_columns += 1
         return
     string_code_subword = array_interleaver_table[int_counter_done_rows][int_counter_done_columns]
-    # Распределение кодового подслова на кодовые подслова цветов пикселя
-
+    for int_current_pixel_index in range(3):
+        int_current_point_of_main_bits_pop_start = int_current_pixel_index * 11
+        int_current_point_of_main_bits_pop_end = (int_current_pixel_index + 1) * 11
+        int_current_point_of_correction_bits_pop_start = (int_current_pixel_index * 4) + 33
+        int_current_point_of_correction_bits_pop_end = (int_current_pixel_index * 4) + 37
+        list_current_pixel_code_subword = list(string_code_subword[int_current_point_of_main_bits_pop_start : int_current_point_of_main_bits_pop_end])
+        list_current_correction_bits = list(string_code_subword[int_current_point_of_correction_bits_pop_start : int_current_point_of_correction_bits_pop_end])
+        for int_list_index, int_current_index_of_correction_bit in enumerate([0, 1, 3, 7]):
+            list_current_pixel_code_subword.insert(int_current_index_of_correction_bit, list_current_correction_bits[int_list_index])
+        array_result[int_counter_done_rows, int_counter_done_columns, int_current_pixel_index] = ''.join(list_current_pixel_code_subword)
+    if int_counter_done_columns < array_interleaver_table.shape[1] - 1: int_counter_done_columns += 1
+    else:
+        int_counter_done_columns = 0
+        int_counter_done_rows += 1
+    return
 def interleaver_codec_decode(array_input: np.array) -> np.array:
     '''Процесс деперемежения'''
     global array_interleaver_table, int_counter_done_items, int_counter_done_columns, int_counter_done_rows, array_result
     array_interleaver_table = np.full((array_input.shape[0], len(array_input[0][0])), fill_value=('-' * 45))
     int_counter_done_items, int_counter_done_rows = -1, 0
     np.vectorize(lambda string_current_submessage: decode_code_words_from_interleaver_submessages(string_current_submessage))(array_input)
-    print(array_interleaver_table)
-    print()
     array_result = np.full((array_interleaver_table.shape[0], array_interleaver_table.shape[0], 3), fill_value = ('-' * 15))
     int_counter_done_columns, int_counter_done_rows = -1, 0
+    np.vectorize(lambda string_current_code_subword: decode_pixel_code_subwords_from_code_subword(string_current_code_subword))(array_interleaver_table)
+    return(array_result)
