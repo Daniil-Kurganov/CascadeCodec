@@ -1,27 +1,32 @@
 import numpy as np
 
-def create_inreleaver_table_from_code_words(string_item: str, array_input: np.array) -> None:
-    '''Функция создания блочного перемежителя для массива строк кодовых подслов. Адаптирована под numpy.vectorize()'''
-    global string_current_result, string_current_check_bits, int_index_of_current_column, int_index_of_current_row, int_index_of_current_item,\
-        list_correction_bit_positions, string_current_main_bits, array_workspace
-    if int_index_of_current_item == -1:
-        int_index_of_current_item += 1
+def create_interleaver_matrix(string_code_subword: str) -> None:
+    '''Заполнение блочного перемежителя. Адаптирована под np.vectorize()'''
+    global array_interleaver_table, int_counter_done_items, int_counter_done_columns, int_counter_done_rows
+    if int_counter_done_items == -1:
+        int_counter_done_items = 0
         return
-    list_workspace = list(string_item)
-    string_current_check_bits += ''.join([list_workspace.pop(int_index_of_current_correction_bit) for int_index_of_current_correction_bit
-                                          in list_correction_bit_positions])
-    string_current_main_bits += ''.join(list_workspace)
-    if int_index_of_current_item < (array_input.shape[2] - 1): int_index_of_current_item += 1
+    string_current_interleaver_table_item = array_interleaver_table[int_counter_done_rows, int_counter_done_columns]
+    list_main_bits, list_checking_bits = list(string_code_subword), []
+    for int_current_position_of_correction_bit in [0, 0, 1, 4]:
+        list_checking_bits.append(list_main_bits.pop(int_current_position_of_correction_bit))
+    int_point_of_main_bits_insert_start, int_point_of_main_bits_insert_end = int_counter_done_items * 11, (int_counter_done_items + 1) * 11
+    int_point_of_correction_bits_insert_start = (int_counter_done_items * 4) + 33
+    int_point_of_correction_bits_insert_end = (int_counter_done_items * 4) + 37
+    string_current_interleaver_table_item = (string_current_interleaver_table_item[0 : int_point_of_main_bits_insert_start] + ''.join(list_main_bits) +
+                                             string_current_interleaver_table_item[int_point_of_main_bits_insert_end : int_point_of_correction_bits_insert_start] +
+                                             ''.join(list_checking_bits) + string_current_interleaver_table_item[int_point_of_correction_bits_insert_end:])
+    array_interleaver_table[int_counter_done_rows, int_counter_done_columns] = string_current_interleaver_table_item
+    if int_counter_done_items < 2: int_counter_done_items += 1
     else:
-        array_workspace[int_index_of_current_row, int_index_of_current_column] = string_current_main_bits + string_current_check_bits
-        string_current_main_bits, string_current_check_bits = '', ''
-        int_index_of_current_item = 0
-        if int_index_of_current_column < (array_input.shape[1] - 1): int_index_of_current_column += 1
+        int_counter_done_items = 0
+        if int_counter_done_columns < array_interleaver_table.shape[1] - 1: int_counter_done_columns += 1
         else:
-            int_index_of_current_column = 0
-            int_index_of_current_row += 1
+            int_counter_done_columns = 0
+            int_counter_done_rows += 1
     return
-def create_interleaver_out_string(string_code_word: str, int_index_of_current_interleaver_column: int) -> None:
+def create_current_string_interleaver_submessage(string_code_word: str, int_index_of_current_interleaver_column: int) -> None:
+    '''Заполнение текущей строки подсообщения перемежителя. Адаптирована под np.vectorize()'''
     global string_current_result
     string_current_result += string_code_word[int_index_of_current_interleaver_column]
     return
@@ -67,20 +72,21 @@ def decode_from_interleaver_table(string_item: str) -> None:
         int_index_of_current_column = 0
         int_index_of_current_row += 1
     return
-def interleaver_codec_encode(array_input: np.array) -> np.array:
+def interleaver_codec_encode(array_input: np.array) -> None:
     '''Процесс перемежения'''
-    global array_workspace, string_current_result, int_index_of_current_row, int_index_of_current_column, int_index_of_current_item
-    int_index_of_current_row, int_index_of_current_column, int_index_of_current_item = 0, 0, -1
+    global array_interleaver_table, int_counter_done_items, int_counter_done_columns, int_counter_done_rows, string_current_result
+    array_interleaver_table = np.full(array_input.shape[:2], fill_value = ('-' * 45))
+    int_counter_done_items, int_counter_done_columns, int_counter_done_rows = -1, 0, 0
+    np.vectorize(lambda string_current_code_subword: create_interleaver_matrix(
+        string_current_code_subword))(array_input)
+    print(array_interleaver_table)
     list_result = []
-    array_workspace = np.full(array_input.shape[:2], fill_value = ('-' * 45))
-    np.vectorize(lambda string_current_item: create_inreleaver_table_from_code_words(string_current_item, array_input))(array_input)
-    print(array_workspace)
-    for array_current_row in array_workspace:
+    for array_current_interleaver_table_row in array_interleaver_table:
         list_workspace = []
         for int_index_of_current_interleaver_column in range(45):
             string_current_result = ''
-            np.vectorize(lambda string_current_code_word: create_interleaver_out_string(string_current_code_word,
-                                                                                        int_index_of_current_interleaver_column))(array_current_row)
+            np.vectorize(lambda string_current_code_word: create_current_string_interleaver_submessage(
+                string_current_code_word, int_index_of_current_interleaver_column))(array_current_interleaver_table_row)
             list_workspace.append(string_current_result[1:])
         list_result.append(list_workspace)
     return np.array(list_result)
